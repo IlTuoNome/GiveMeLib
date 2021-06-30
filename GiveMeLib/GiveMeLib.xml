@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GiveMeLib</name>
+    </assembly>
+    <members>
+        <member name="T:GiveMeLib.InstantGamingGiveMe">
+            <summary>
+            Twitch/InstantGaming operations class
+            </summary>
+        </member>
+        <member name="M:GiveMeLib.InstantGamingGiveMe.FindStreamer">
+            <summary>
+            Search new streamers
+            </summary>
+            <returns>StramerInfo list with all new streamers founded</returns>
+        </member>
+        <member name="M:GiveMeLib.InstantGamingGiveMe.FindStreamer(System.Collections.Generic.List{GiveMeLib.StreamerInfo}@)">
+            <summary>
+            Search new streamers without found duplicates
+            </summary>
+            <param name="streamerKnow">List with streamers already found</param>
+            <returns>StramerInfo list with all new streamers founded</returns>
+        </member>
+        <member name="M:GiveMeLib.InstantGamingGiveMe.TestStreamer(System.Collections.Generic.List{GiveMeLib.StreamerInfo}@)">
+            <summary>
+            Test streamers for new links
+            </summary>
+            <param name="streamers">List with streamers</param>
+        </member>
+        <member name="M:GiveMeLib.InstantGamingGiveMe.CheckStatus(System.Collections.Generic.List{GiveMeLib.StreamerInfo}@)">
+            <summary>
+            Check the link status
+            </summary>
+            <param name="streamers">List with streamers</param>
+        </member>
+        <member name="M:GiveMeLib.InstantGamingGiveMe.DbOnlineRecover(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Recover streamers from online MySql database
+            </summary>
+            <param name="ipServer">Server Ip</param>
+            <param name="portServer">Server Port</param>
+            <param name="dbNome">Db name</param>
+            <param name="dbUser">Db username</param>
+            <param name="dbPass">Db password</param>
+            <returns>StramerInfo list with all database streamers</returns>
+        </member>
+        <member name="M:GiveMeLib.InstantGamingGiveMe.DbOnlineSave(System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.List{GiveMeLib.StreamerInfo}@,System.Byte)">
+            <summary>
+            Save streamers into database
+            </summary>
+            <param name="ipServer">Server Ip</param>
+            <param name="portServer">Server Port</param>
+            <param name="dbNome">Db name</param>
+            <param name="dbUser">Db username</param>
+            <param name="dbPass">Db password</param>
+            <param name="streamers">List of streamers to save</param>
+            <param name="maxthreads">Maximum parallel db connections</param>
+        </member>
+        <member name="T:GiveMeLib.StreamerInfo">
+            <summary>
+            Streamer entity
+            </summary>
+        </member>
+        <member name="P:GiveMeLib.StreamerInfo.StreamerName">
+            <summary>
+            Streamer name
+            </summary>
+        </member>
+        <member name="P:GiveMeLib.StreamerInfo.StreamerLink">
+            <summary>
+            Instantgaming streamer giveaway
+            </summary>
+        </member>
+        <member name="P:GiveMeLib.StreamerInfo.StreamerStatus">
+            <summary>
+            Instantgaming streamer giveaway status
+            </summary>
+        </member>
+        <member name="T:GiveMeLib.ListStreamExtender">
+            <summary>
+            Operations list extender for StreamerInfo list
+            </summary>
+        </member>
+        <member name="M:GiveMeLib.ListStreamExtender.ContainsStreamer(System.Collections.Generic.List{GiveMeLib.StreamerInfo},System.String)">
+            <summary>
+            Check if the list contains the streamer
+            </summary>
+            <param name="streamer">Streamer name to search</param>
+            <returns>True if the list contains the streamer</returns>
+        </member>
+        <member name="M:GiveMeLib.ListStreamExtender.ContainsLink(System.Collections.Generic.List{GiveMeLib.StreamerInfo},System.String)">
+            <summary>
+            Check if the list contains the link
+            </summary>
+            <param name="link">Link to search</param>
+            <returns>True if the list contains the link</returns>
+        </member>
+        <member name="M:GiveMeLib.ListStreamExtender.RetriveStreamer(System.Collections.Generic.List{GiveMeLib.StreamerInfo},System.String)">
+            <summary>
+            Retrive streamer istance from the list by streamer name
+            </summary>
+            <param name="streamer">Streamer name</param>
+            <returns>Istance if the list contains the streamer </returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,13 @@
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\bin\Release\net5.0\GiveMeLib.deps.json
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\bin\Release\net5.0\GiveMeLib.dll
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\bin\Release\net5.0\ref\GiveMeLib.dll
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\bin\Release\net5.0\GiveMeLib.pdb
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\obj\Release\net5.0\GiveMeLib.csproj.AssemblyReference.cache
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\obj\Release\net5.0\GiveMeLib.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\obj\Release\net5.0\GiveMeLib.AssemblyInfoInputs.cache
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\obj\Release\net5.0\GiveMeLib.AssemblyInfo.cs
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\obj\Release\net5.0\GiveMeLib.csproj.CoreCompileInputs.cache
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\obj\Release\net5.0\GiveMeLib.dll
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\obj\Release\net5.0\ref\GiveMeLib.dll
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\obj\Release\net5.0\GiveMeLib.pdb
+C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\bin\Release\net5.0\GiveMeLib.xml
