@@ -1,4 +1,3 @@
-C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\bin\Release\net5.0\GiveMeLib.xml
 C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\bin\Release\net5.0\GiveMeLib.deps.json
 C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\bin\Release\net5.0\GiveMeLib.dll
 C:\Users\Daniele\Desktop\GiveMeLib\GiveMeLib\bin\Release\net5.0\ref\GiveMeLib.dll

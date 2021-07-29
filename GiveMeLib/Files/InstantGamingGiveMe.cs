@@ -12,22 +12,22 @@ namespace GiveMeLib
     /// <summary>
     /// Twitch/InstantGaming operations class
     /// </summary>
-    public class InstantGamingGiveMe
+    public static class InstantGamingGiveMe
     {
         #region Twitch-Instantgaming
         /// <summary>
         /// Search new streamers
         /// </summary>
+        /// <param name="maxPage">Maximum number of pages to retrieve</param>
         /// <returns>StramerInfo list with all new streamers founded</returns>
-        static public List<StreamerInfo> FindStreamer()
+        static public List<StreamerInfo> FindStreamer(short maxPage = 10)
         {
             List<StreamerInfo> streamers = new List<StreamerInfo>();
             using (HttpRequest richiesta = new HttpRequest())
             {
                 richiesta.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0";
                 richiesta.IgnoreProtocolErrors = true;
-                short count = 1;
-                while (true)
+                for(short count = 1; count <= maxPage; count++)
                 {
                     try
                     {
@@ -52,7 +52,6 @@ namespace GiveMeLib
                                     streamers.Add(new StreamerInfo { StreamerName = userRaw });
                                 }
                             }
-                            count++;
                         }
                     }
                     catch(Exception err)
@@ -75,18 +74,18 @@ namespace GiveMeLib
 
         /// <summary>
         /// Search new streamers without found duplicates
-        /// </summary>
+        /// </summary>        
+        /// <param name="maxPage">Maximum number of pages to retrieve</param>
         /// <param name="streamerKnow">List with streamers already found</param>
         /// <returns>StramerInfo list with all new streamers founded</returns>
-        static public List<StreamerInfo> FindStreamer(in List<StreamerInfo> streamerKnow)
+        static public List<StreamerInfo> FindStreamer(in List<StreamerInfo> streamerKnow, short maxPage = 10)
         {
             List<StreamerInfo> streamers = new List<StreamerInfo>();
             using (HttpRequest richiesta = new HttpRequest())
             {
                 richiesta.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0";
                 richiesta.IgnoreProtocolErrors = true;
-                short count = 1;
-                while (true)
+                for(short count = 1; count <= maxPage; count++)
                 {
                     try
                     {
@@ -114,7 +113,6 @@ namespace GiveMeLib
                                     }
                                 }
                             }
-                            count++;
                         }
                     }
                     catch (Exception err)
@@ -152,25 +150,39 @@ namespace GiveMeLib
                 {
                     richiestaControllo.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0";
                     richiestaControllo.IgnoreProtocolErrors = true;
-                    Thread.Sleep(TimeSpan.FromMilliseconds(30));
-                    string richiestaRisposta = richiestaControllo.Get($"https://www.instant-gaming.com/en/giveaway/{streamer.StreamerName.ToUpper()}").ToString();
-                    if (richiestaRisposta.Contains("404 Not Found"))
+                    try
                     {
-                        continue;
-                    }
-                    else
-                    {
-                        if (richiestaRisposta.Contains("has won"))
+                        Thread.Sleep(TimeSpan.FromMilliseconds(30));
+                        string richiestaRisposta = richiestaControllo.Get($"https://www.instant-gaming.com/en/giveaway/{streamer.StreamerName.ToUpper()}").ToString();
+                        if (richiestaRisposta.Contains("404 Not Found"))
                         {
-                            Match vincitore = Regex.Match(richiestaRisposta, @"<span class=""winner-nickname"">\S+</span>");
-
-                            streamers.RetriveStreamer(streamer.StreamerName).StreamerLink = $"https://www.instant-gaming.com/en/giveaway/{streamer.StreamerName.ToUpper()}";
-                            streamers.RetriveStreamer(streamer.StreamerName).StreamerStatus = $"Winner {vincitore.Value.Replace(@"<span class=""winner-nickname"">", string.Empty).Replace("</span>", string.Empty)}";
+                            continue;
                         }
-                        else if (richiestaRisposta.Contains("Win the game of your choice with"))
+                        else
                         {
-                            streamers.RetriveStreamer(streamer.StreamerName).StreamerLink = $"https://www.instant-gaming.com/en/giveaway/{streamer.StreamerName.ToUpper()}";
-                            streamers.RetriveStreamer(streamer.StreamerName).StreamerStatus = "Started";
+                            if (richiestaRisposta.Contains("has won"))
+                            {
+                                Match vincitore = Regex.Match(richiestaRisposta, @"<span class=""winner-nickname"">\S+</span>");
+
+                                streamers.RetriveStreamer(streamer.StreamerName).StreamerLink = $"https://www.instant-gaming.com/en/giveaway/{streamer.StreamerName.ToUpper()}";
+                                streamers.RetriveStreamer(streamer.StreamerName).StreamerStatus = $"Winner {vincitore.Value.Replace(@"<span class=""winner-nickname"">", string.Empty).Replace("</span>", string.Empty)}";
+                            }
+                            else if (richiestaRisposta.Contains("Win the game of your choice with"))
+                            {
+                                streamers.RetriveStreamer(streamer.StreamerName).StreamerLink = $"https://www.instant-gaming.com/en/giveaway/{streamer.StreamerName.ToUpper()}";
+                                streamers.RetriveStreamer(streamer.StreamerName).StreamerStatus = "Started";
+                            }
+                        }
+                    }catch(Exception err)
+                    {
+                        if (err.Message == "Failed to receive the response from the HTTP-server 'instant-gaming.com'.")
+                        {
+                            Thread.Sleep(TimeSpan.FromMinutes(1));
+                            continue;
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                 }
@@ -199,23 +211,38 @@ namespace GiveMeLib
                 {
                     richiestaControllo.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0";
                     richiestaControllo.IgnoreProtocolErrors = true;
-                    Thread.Sleep(TimeSpan.FromMilliseconds(30));
-                    string richiestaRisposta = richiestaControllo.Get(streamer.StreamerLink).ToString();
-                    if (richiestaRisposta.Contains("404 Not Found"))
+                    try
                     {
-                        continue;
-                    }
-                    else
-                    {
-                        if (richiestaRisposta.Contains("has won"))
+                        Thread.Sleep(TimeSpan.FromMilliseconds(30));
+                        string richiestaRisposta = richiestaControllo.Get(streamer.StreamerLink).ToString();
+                        if (richiestaRisposta.Contains("404 Not Found"))
                         {
-                            Match vincitore = Regex.Match(richiestaRisposta, @"<span class=""winner-nickname"">\S+</span>");
-
-                            streamers.RetriveStreamer(streamer.StreamerName).StreamerStatus = $"Winner {vincitore.Value.Replace(@"<span class=""winner-nickname"">", string.Empty).Replace("</span>", string.Empty)}";
+                            continue;
                         }
-                        else if (richiestaRisposta.Contains("Win the game of your choice with"))
+                        else
                         {
-                            streamers.RetriveStreamer(streamer.StreamerName).StreamerStatus = $"Started";
+                            if (richiestaRisposta.Contains("has won"))
+                            {
+                                Match vincitore = Regex.Match(richiestaRisposta, @"<span class=""winner-nickname"">\S+</span>");
+
+                                streamers.RetriveStreamer(streamer.StreamerName).StreamerStatus = $"Winner {vincitore.Value.Replace(@"<span class=""winner-nickname"">", string.Empty).Replace("</span>", string.Empty)}";
+                            }
+                            else if (richiestaRisposta.Contains("Win the game of your choice with"))
+                            {
+                                streamers.RetriveStreamer(streamer.StreamerName).StreamerStatus = $"Started";
+                            }
+                        }
+                    }
+                    catch (Exception err)
+                    {
+                        if (err.Message == "Failed to receive the response from the HTTP-server 'instant-gaming.com'.")
+                        {
+                            Thread.Sleep(TimeSpan.FromMinutes(1));
+                            continue;
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                 }
@@ -256,9 +283,9 @@ namespace GiveMeLib
 
                 connection.Close();
             }
-            catch (Exception errore)
+            catch (Exception err)
             {
-                throw new Exception(errore.Message);
+                throw new Exception(err.Message);
             }
 
             return (streamers.Count != 0) ? streamers : null;
@@ -307,9 +334,9 @@ namespace GiveMeLib
                         }
                     }
                     connection.Close();
-                }catch(Exception errore)
+                }catch(Exception err)
                 {
-                    throw new Exception(errore.Message);
+                    throw new Exception(err.Message);
                 }
             });
         }

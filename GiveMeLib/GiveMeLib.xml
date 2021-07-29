@@ -9,16 +9,18 @@
             Twitch/InstantGaming operations class
             </summary>
         </member>
-        <member name="M:GiveMeLib.InstantGamingGiveMe.FindStreamer">
+        <member name="M:GiveMeLib.InstantGamingGiveMe.FindStreamer(System.Int16)">
             <summary>
             Search new streamers
             </summary>
+            <param name="maxPage">Maximum number of pages to retrieve</param>
             <returns>StramerInfo list with all new streamers founded</returns>
         </member>
-        <member name="M:GiveMeLib.InstantGamingGiveMe.FindStreamer(System.Collections.Generic.List{GiveMeLib.StreamerInfo}@)">
+        <member name="M:GiveMeLib.InstantGamingGiveMe.FindStreamer(System.Collections.Generic.List{GiveMeLib.StreamerInfo}@,System.Int16)">
             <summary>
             Search new streamers without found duplicates
-            </summary>
+            </summary>        
+            <param name="maxPage">Maximum number of pages to retrieve</param>
             <param name="streamerKnow">List with streamers already found</param>
             <returns>StramerInfo list with all new streamers founded</returns>
         </member>
