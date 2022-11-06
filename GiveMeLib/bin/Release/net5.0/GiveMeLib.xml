@@ -42,7 +42,7 @@
             </summary>
             <param name="ipServer">Server Ip</param>
             <param name="portServer">Server Port</param>
-            <param name="dbNome">Db name</param>
+            <param name="dbName">Db name</param>
             <param name="dbUser">Db username</param>
             <param name="dbPass">Db password</param>
             <returns>StramerInfo list with all database streamers</returns>
@@ -53,11 +53,11 @@
             </summary>
             <param name="ipServer">Server Ip</param>
             <param name="portServer">Server Port</param>
-            <param name="dbNome">Db name</param>
+            <param name="dbName">Db name</param>
             <param name="dbUser">Db username</param>
             <param name="dbPass">Db password</param>
             <param name="streamers">List of streamers to save</param>
-            <param name="maxthreads">Maximum parallel db connections</param>
+            <param name="maxThreads">Maximum parallel db connections</param>
         </member>
         <member name="T:GiveMeLib.StreamerInfo">
             <summary>
