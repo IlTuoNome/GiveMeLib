@@ -49,7 +49,7 @@ namespace GiveMeLib
                                 string userRaw = user.Value.Replace(@"style=""color:inherit"" href=""/", "").Replace(@""">", "").ToUpper();
                                 if (!streamers.ContainsStreamer(userRaw))
                                 {
-                                    streamers.Add(new StreamerInfo { StreamerName = userRaw });
+                                    streamers.Add(new StreamerInfo(userRaw));
                                 }
                             }
                         }
@@ -80,6 +80,15 @@ namespace GiveMeLib
         /// <returns>StramerInfo list with all new streamers founded</returns>
         static public List<StreamerInfo> FindStreamer(in List<StreamerInfo> streamerKnow, short maxPage = 10)
         {
+            if(streamerKnow == null)
+            {
+                throw new Exception("StreamerKnow is null.");
+            }
+            else if(streamerKnow.Count == 0)
+            {
+                throw new Exception("No streamers in the streamerKnow list, use first FindStreamer.");
+            }
+
             List<StreamerInfo> streamers = new List<StreamerInfo>();
             using (HttpRequest richiesta = new HttpRequest())
             {
@@ -109,7 +118,7 @@ namespace GiveMeLib
                                 {
                                     if (!streamers.ContainsStreamer(userRaw))
                                     {
-                                        streamers.Add(new StreamerInfo { StreamerName = userRaw });
+                                        streamers.Add(new StreamerInfo(userRaw));
                                     }
                                 }
                             }
@@ -139,7 +148,11 @@ namespace GiveMeLib
         /// <param name="streamers">List with streamers</param>
         static public void TestStreamer(ref List<StreamerInfo> streamers)
         {
-            if(streamers.Count == 0)
+            if(streamers == null)
+            {
+                throw new Exception("Streamers is null.");
+            }
+            else if (streamers.Count == 0)
             {
                 throw new Exception("No streamers in the list.");
             }
@@ -160,7 +173,7 @@ namespace GiveMeLib
                         }
                         else
                         {
-                            if (richiestaRisposta.Contains("has won"))
+                            if (richiestaRisposta.Contains("won"))
                             {
                                 Match vincitore = Regex.Match(richiestaRisposta, @"<span class=""winner-nickname"">\S+</span>");
 
@@ -195,7 +208,11 @@ namespace GiveMeLib
         /// <param name="streamers">List with streamers</param>
         static public void CheckStatus(ref List<StreamerInfo> streamers)
         {
-            if (streamers.Count == 0)
+            if (streamers == null)
+            {
+                throw new Exception("Streamers is null.");
+            }
+            else if (streamers.Count == 0)
             {
                 throw new Exception("No streamers in the list.");
             }
@@ -221,7 +238,7 @@ namespace GiveMeLib
                         }
                         else
                         {
-                            if (richiestaRisposta.Contains("has won"))
+                            if (richiestaRisposta.Contains("won"))
                             {
                                 Match vincitore = Regex.Match(richiestaRisposta, @"<span class=""winner-nickname"">\S+</span>");
 
@@ -256,17 +273,17 @@ namespace GiveMeLib
         /// </summary>
         /// <param name="ipServer">Server Ip</param>
         /// <param name="portServer">Server Port</param>
-        /// <param name="dbNome">Db name</param>
+        /// <param name="dbName">Db name</param>
         /// <param name="dbUser">Db username</param>
         /// <param name="dbPass">Db password</param>
         /// <returns>StramerInfo list with all database streamers</returns>
-        static public List<StreamerInfo> DbOnlineRecover(string ipServer, string portServer, string dbNome, string dbUser, string dbPass)
+        static public List<StreamerInfo> DbOnlineRecover(string ipServer, string portServer, string dbName, string dbUser, string dbPass)
         {
             List<StreamerInfo> streamers = new List<StreamerInfo>();
 
             try
             {
-                MySqlConnection connection = new MySqlConnection("server=" + ipServer + "; port=" + portServer + "; database=" + dbNome + "; user id=" + dbUser + "; password=" + dbPass);
+                MySqlConnection connection = new MySqlConnection("server=" + ipServer + "; port=" + portServer + "; database=" + dbName + "; user id=" + dbUser + "; password=" + dbPass);
 
                 connection.Open();
 
@@ -276,7 +293,10 @@ namespace GiveMeLib
                     {
                         while (dataRead.Read())
                         {
-                            streamers.Add(new StreamerInfo { StreamerName = dataRead.GetString(0), StreamerLink = dataRead.GetString(1), StreamerStatus = dataRead.GetString(2) });
+                            StreamerInfo streamer = new StreamerInfo(dataRead.GetString(0));
+                            streamer.StreamerLink = (!string.IsNullOrEmpty(dataRead.GetString(1))) ? dataRead.GetString(1) : null;
+                            streamer.StreamerStatus = (!string.IsNullOrEmpty(dataRead.GetString(2))) ? dataRead.GetString(2) : null;
+                            streamers.Add(streamer);
                         }
                     }
                 }
@@ -296,23 +316,27 @@ namespace GiveMeLib
         /// </summary>
         /// <param name="ipServer">Server Ip</param>
         /// <param name="portServer">Server Port</param>
-        /// <param name="dbNome">Db name</param>
+        /// <param name="dbName">Db name</param>
         /// <param name="dbUser">Db username</param>
         /// <param name="dbPass">Db password</param>
         /// <param name="streamers">List of streamers to save</param>
-        /// <param name="maxthreads">Maximum parallel db connections</param>
-        static public void DbOnlineSave(string ipServer, string portServer, string dbNome, string dbUser, string dbPass, in List<StreamerInfo> streamers, byte maxthreads = 5)
+        /// <param name="maxThreads">Maximum parallel db connections</param>
+        static public void DbOnlineSave(string ipServer, string portServer, string dbName, string dbUser, string dbPass, in List<StreamerInfo> streamers, byte maxThreads = 5)
         {
-            if (streamers.Count == 0)
+            if(streamers == null)
+            {
+                throw new Exception("Streamers is null.");
+            }
+            else if (streamers.Count == 0)
             {
                 throw new Exception("No streamers in the list.");
             }
 
-            Parallel.ForEach(streamers, new ParallelOptions { MaxDegreeOfParallelism = maxthreads }, streamer =>
+            Parallel.ForEach(streamers, new ParallelOptions { MaxDegreeOfParallelism = maxThreads }, streamer =>
             {
                 try
                 {
-                    MySqlConnection connection = new MySqlConnection("server=" + ipServer + "; port=" + portServer + "; database=" + dbNome + "; user id=" + dbUser + "; password=" + dbPass);
+                    MySqlConnection connection = new MySqlConnection("server=" + ipServer + "; port=" + portServer + "; database=" + dbName + "; user id=" + dbUser + "; password=" + dbPass);
 
                     connection.Open();
 
